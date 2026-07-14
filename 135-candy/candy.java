@@ -4,37 +4,42 @@ class Solution {
             return 0;
 
         int n = rating.length;
-        int maxCnt = 0;
+        int sum = 1;
+        int i = 1;
 
-        int[] left = new int[n];
-        int[] right = new int[n];
+        while (i < n) {
 
-        left[0] = 1;
-        right[n - 1] = 1;
+            // Equal ratings
+            if (rating[i] == rating[i - 1]) {
+                sum += 1;
+                i++;
+                continue;
+            }
 
-        // Left to right
-        for (int i = 1; i < n; i++) {
-            if (rating[i] > rating[i - 1]) {
-                left[i] = left[i - 1] + 1;
-            } else {
-                left[i] = 1;
+            // Increasing slope
+            int peak = 1;
+
+            while (i < n && rating[i] > rating[i - 1]) {
+                peak++;
+                sum += peak;
+                i++;
+            }
+
+            // Decreasing slope
+            int down = 0;
+
+            while (i < n && rating[i] < rating[i - 1]) {
+                down++;
+                sum += down;
+                i++;
+            }
+
+            // Adjust peak if descending side is longer
+            if (down > peak - 1) {
+                sum += down - (peak - 1);
             }
         }
 
-        // Right to left
-        for (int i = n - 2; i >= 0; i--) {
-            if (rating[i] > rating[i + 1]) {
-                right[i] = right[i + 1] + 1;
-            } else {
-                right[i] = 1;
-            }
-        }
-
-        // Sum the maximum candies required at each position
-        for (int i = 0; i < n; i++) {
-            maxCnt += Math.max(left[i], right[i]);
-        }
-
-        return maxCnt;
+        return sum;
     }
 }
