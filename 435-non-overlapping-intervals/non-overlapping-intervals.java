@@ -3,23 +3,23 @@ import java.util.*;
 class Solution {
     public int eraseOverlapIntervals(int[][] intervals) {
 
-        if (intervals == null || intervals.length == 0) {
-            return 0;
+        Map<Integer, Integer> map = new TreeMap<>();
+        
+        for (int i =0; i < intervals.length; i++) {
+            int start = intervals[i][0];
+            int end = intervals[i][1];
+            map.merge(end, start, (o, n) -> Math.max(o, n));
         }
 
-        Arrays.sort(intervals, (a, b) -> Integer.compare(a[1], b[1]));
-
-        int count = 0;
-        int prevEnd = intervals[0][1];
-
-        for (int i = 1; i < intervals.length; i++) {
-            if (intervals[i][0] < prevEnd) {
-                count++;
-            } else {
-                prevEnd = intervals[i][1];
-            }
+        int result = intervals.length;
+        int preEnd = Integer.MIN_VALUE;
+        for (Map.Entry<Integer, Integer> iter : map.entrySet()) {
+            int end = iter.getKey();
+            int start = iter.getValue();
+            if (start < preEnd) continue;
+            result--;
+            preEnd = end;
         }
-
-        return count;
+        return result;
     }
 }
