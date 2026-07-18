@@ -3,9 +3,15 @@ class Solution {
         int smallest = nums[0];
         int largest = nums[0];
 
-        for(int num : nums){
-            smallest = Math.min(smallest,num);
-            largest = Math.max(largest,num);
+        for (int i = 0; i < nums.length; i++) {
+
+            if (nums[i] < smallest) {
+                smallest = nums[i];
+            }
+
+            if (nums[i] > largest) {
+                largest = nums[i];
+            }
         }
 
         return gcd(smallest,largest);  
